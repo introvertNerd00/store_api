@@ -31,13 +31,18 @@ const getProducts = async (req, res) => {
 
     }
 
+    let page = Number(req.query.page) || 1
+    let limit = Number(req.query.limit) || 10
+    let skip = (page-1)*limit
+    apiData = apiData.skip(skip).limit(limit)
+
     const products = await apiData
     res.status(200).json({products})
 }
 
 const getProductsTesting = async (req, res) => {
     const products = await Product.find(req.query)
-    res.status(200).json({products})
+    res.status(200).json({products, nbHits:products.length})
 }
 
 module.exports = {getProducts, getProductsTesting}
